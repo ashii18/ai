@@ -1,0 +1,27 @@
+import heapq
+ 
+def prim(graph):
+    start_vertex = next(iter(graph))
+    visited, edges, mst = {start_vertex}, [(weight, start_vertex, neighbor) for neighbor, weight in graph[start_vertex]], []
+ 
+    while edges:
+        weight, current_vertex, next_vertex = heapq.heappop(edges)
+        if next_vertex not in visited:
+            visited.add(next_vertex)
+            mst.append((weight, current_vertex, next_vertex))
+            edges.extend((weight, next_vertex, neighbor) for neighbor, weight in graph[next_vertex] if neighbor not in visited)
+            heapq.heapify(edges)
+ 
+    return mst
+ 
+# Example usage:
+graph = {
+    'A': [('B', 2), ('D', 5)],
+    'B': [('A', 2), ('C', 1), ('D', 3)],
+    'C': [('B', 1), ('D', 4), ('E', 6)],
+    'D': [('A', 5), ('B', 3), ('C', 4), ('E', 7)],
+    'E': [('C', 6), ('D', 7)],
+}
+ 
+result = prim(graph)
+print("Minimum Spanning Tree:", result)
